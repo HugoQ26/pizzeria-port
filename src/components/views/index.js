@@ -6,7 +6,7 @@ import NewTableOrder from './NewTableOrder/NewTableOrder';
 import NewWaiterOrder from './NewWaiterOrder/NewWaiterOrder';
 import Table from './Table/Table';
 import Tables from './Tables/Tables';
-import Waiter from './Waiter/Waiter';
+import Waiter from './Waiter/WaiterContainer';
 import WaiterOrder from './WaiterOrder/WaiterOrder';
 import Homepage from './Homepage/Homepage';
 
