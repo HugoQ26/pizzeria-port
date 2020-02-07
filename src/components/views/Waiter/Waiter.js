@@ -12,43 +12,62 @@ import Button from '@material-ui/core/Button';
 class Waiter extends React.Component {
   static propTypes = {
     fetchTables: PropTypes.func,
+    changeTableStatus: PropTypes.func,
     loading: PropTypes.object,
     tables: PropTypes.object,
-  }
+  };
 
-  componentDidMount(){
+  componentDidMount() {
     const { fetchTables } = this.props;
     fetchTables();
   }
 
-  renderActions(status){
+  changeStatus = (status, id) => {
+    return this.props.changeTableStatus(status, id);
+  };
+
+  renderActions(status, tableId) {
     switch (status) {
       case 'free':
         return (
           <>
-            <Button>thinking</Button>
-            <Button>new order</Button>
+            <Button onClick={() => this.changeStatus('thinking', tableId)}>
+              thinking
+            </Button>
+            <Button onClick={() => this.changeStatus('ordered', tableId)}>
+              new order
+            </Button>
           </>
         );
       case 'thinking':
         return (
-          <Button>new order</Button>
+          <Button onClick={() => this.changeStatus('ordered', tableId)}>
+            new order
+          </Button>
         );
       case 'ordered':
         return (
-          <Button>prepared</Button>
+          <Button onClick={() => this.changeStatus('prepared', tableId)}>
+            prepared
+          </Button>
         );
       case 'prepared':
         return (
-          <Button>delivered</Button>
+          <Button onClick={() => this.changeStatus('delivered', tableId)}>
+            delivered
+          </Button>
         );
       case 'delivered':
         return (
-          <Button>paid</Button>
+          <Button onClick={() => this.changeStatus('paid', tableId)}>
+            paid
+          </Button>
         );
       case 'paid':
         return (
-          <Button>free</Button>
+          <Button onClick={() => this.changeStatus('free', tableId, null)}>
+            free
+          </Button>
         );
       default:
         return null;
@@ -56,15 +75,20 @@ class Waiter extends React.Component {
   }
 
   render() {
-    const { loading: { active, error }, tables } = this.props;
+    const {
+      loading: { active, error },
+      tables,
+    } = this.props;
 
-    if(active || !tables.length){
+    console.log(tables);
+
+    if (active || !tables.length) {
       return (
         <Paper className={styles.component}>
           <p>Loading...</p>
         </Paper>
       );
-    } else if(error) {
+    } else if (error) {
       return (
         <Paper className={styles.component}>
           <p>Error! Details:</p>
@@ -89,18 +113,18 @@ class Waiter extends React.Component {
                   <TableCell component="th" scope="row">
                     {row.id}
                   </TableCell>
-                  <TableCell>
-                    {row.status}
-                  </TableCell>
+                  <TableCell>{row.status}</TableCell>
                   <TableCell>
                     {row.order && (
-                      <Button to={`${process.env.PUBLIC_URL}/waiter/order/${row.order}`}>
+                      <Button
+                        to={`${process.env.PUBLIC_URL}/waiter/order/${row.order}`}
+                      >
                         {row.order}
                       </Button>
                     )}
                   </TableCell>
                   <TableCell>
-                    {this.renderActions(row.status)}
+                    {this.renderActions(row.status, row.id)}
                   </TableCell>
                 </TableRow>
               ))}
